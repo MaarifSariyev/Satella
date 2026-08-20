@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Satella — Where data meets opportunity.</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue:#185FA5; --navy:#26215C; --blue-lt:#E6F1FB; --blue-md:#7FA8D4;
+    --green:#1D9E75; --green-lt:#E1F5EE; --neutral:#F1EFE8; --card:#F7F6F1;
+    --gray:#5F5E5A; --white:#fff; --ink:#1a1730;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',sans-serif;color:var(--ink);background:var(--neutral);line-height:1.6;overflow-x:hidden}
+  a{text-decoration:none;color:inherit}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px}
+
+  /* ---------- Nav ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(241,239,232,.85);backdrop-filter:blur(10px);border-bottom:1px solid #E4E2D8}
+  .nav-in{max-width:1140px;margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px}
+  .logo h1{font-family:'Montserrat';font-weight:800;font-size:21px;color:var(--navy);letter-spacing:.5px}
+  .nav-cta{font-family:'Montserrat';font-weight:700;font-size:14px;background:var(--navy);color:#fff;padding:10px 20px;border-radius:10px;transition:background .15s}
+  .nav-cta:hover{background:#332c6e}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:150px 0 90px;overflow:hidden}
+  .hero-grid{position:absolute;inset:0;z-index:0;opacity:.55}
+  .hero .wrap{position:relative;z-index:2}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:'Montserrat';font-weight:700;font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:22px}
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--green)}
+  .hero h2{font-family:'Montserrat';font-weight:900;font-size:clamp(38px,6vw,72px);line-height:1.02;color:var(--navy);letter-spacing:-1px;max-width:16ch}
+  .hero h2 .hl{color:var(--green)}
+  .hero p{font-size:clamp(17px,2vw,21px);color:var(--gray);max-width:52ch;margin:26px 0 38px}
+  .btns{display:flex;gap:14px;flex-wrap:wrap}
+  .btn-primary{font-family:'Montserrat';font-weight:700;font-size:16px;background:var(--green);color:#fff;padding:16px 34px;border-radius:12px;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(29,158,117,.28)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(29,158,117,.36)}
+  .btn-ghost{font-family:'Montserrat';font-weight:700;font-size:16px;color:var(--navy);padding:16px 28px;border-radius:12px;border:1.5px solid #C9C7BC;transition:border-color .15s}
+  .btn-ghost:hover{border-color:var(--navy)}
+
+  /* ---------- Stat strip ---------- */
+  .strip{display:flex;gap:48px;flex-wrap:wrap;margin-top:64px;padding-top:32px;border-top:1px solid #D9D7CC}
+  .stat .n{font-family:'Montserrat';font-weight:800;font-size:34px;color:var(--navy)}
+  .stat .l{font-size:13.5px;color:var(--gray);margin-top:2px}
+
+  /* ---------- Sections ---------- */
+  section{padding:86px 0}
+  .sec-eyebrow{font-family:'Montserrat';font-weight:700;font-size:12.5px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+  .sec-eyebrow::before{content:"";width:14px;height:14px;border-radius:3px;background:var(--green)}
+  .sec-title{font-family:'Montserrat';font-weight:800;font-size:clamp(28px,4vw,40px);color:var(--navy);letter-spacing:-.5px;max-width:20ch;margin-bottom:18px}
+  .sec-lead{font-size:18px;color:var(--gray);max-width:60ch}
+
+  /* problem/solution split */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .split.alt{background:var(--white)}
+  .plist{list-style:none;margin-top:28px;display:flex;flex-direction:column;gap:18px}
+  .plist li{display:flex;gap:14px;align-items:flex-start}
+  .plist .dot{flex:0 0 auto;width:26px;height:26px;border-radius:7px;background:var(--green-lt);color:var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;font-family:'Montserrat';font-size:14px;margin-top:2px}
+  .plist b{font-family:'Montserrat';color:var(--navy);font-size:16px}
+  .plist span{color:var(--gray);font-size:15px}
+
+  .card-viz{background:var(--navy);border-radius:20px;padding:34px;color:#fff}
+  .card-viz .cap{font-family:'Montserrat';font-size:12px;letter-spacing:2px;color:var(--blue-lt);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .card-viz .big{font-family:'Montserrat';font-weight:900;font-size:76px;color:var(--green);line-height:1;margin:14px 0 4px}
+  .card-viz .sub{color:#fff;font-style:italic;margin-bottom:22px}
+  .vbar{margin-bottom:12px}
+  .vbar .vl{font-size:12px;color:var(--blue-lt);margin-bottom:5px;display:flex;justify-content:space-between}
+  .vtrack{height:7px;background:#3a3570;border-radius:4px;overflow:hidden}
+  .vtrack>span{display:block;height:100%;background:var(--green);border-radius:4px}
+
+  /* how it works */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:52px;counter-reset:s}
+  .step{background:var(--card);border:1px solid #E4E2D8;border-radius:16px;padding:26px 22px;position:relative}
+  .step::before{counter-increment:s;content:"0" counter(s);font-family:'Montserrat';font-weight:800;font-size:14px;color:var(--green);letter-spacing:1px}
+  .step h4{font-family:'Montserrat';font-weight:700;font-size:18px;color:var(--navy);margin:12px 0 8px}
+  .step p{font-size:14px;color:var(--gray)}
+
+  /* differentiator */
+  .diff{background:var(--white)}
+  .diff-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:48px}
+  .dcard{padding:30px 26px;border-radius:16px;border:1px solid #E4E2D8}
+  .dcard.hl{background:var(--green);border-color:var(--green);color:#fff}
+  .dcard .ic{font-size:28px;margin-bottom:14px}
+  .dcard h4{font-family:'Montserrat';font-weight:700;font-size:19px;margin-bottom:10px;color:var(--navy)}
+  .dcard.hl h4{color:#fff}
+  .dcard p{font-size:14.5px;color:var(--gray)}
+  .dcard.hl p{color:var(--green-lt)}
+
+  /* final CTA */
+  .final{position:relative;text-align:center;padding:110px 0;overflow:hidden}
+  .final-grid{position:absolute;inset:0;z-index:0;opacity:.4}
+  .final .wrap{position:relative;z-index:2}
+  .final h3{font-family:'Montserrat';font-weight:900;font-size:clamp(30px,5vw,52px);color:var(--navy);letter-spacing:-.5px;max-width:18ch;margin:0 auto 20px}
+  .final p{font-size:18px;color:var(--gray);margin-bottom:34px}
+
+  footer{background:var(--navy);color:#fff;padding:44px 0}
+  .foot-in{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px}
+  .foot-in .logo h1{color:#fff}
+  footer .muted{color:var(--blue-md);font-size:13.5px}
+
+  @media(max-width:860px){
+    .split{grid-template-columns:1fr;gap:36px}
+    .steps{grid-template-columns:1fr 1fr}
+    .diff-grid{grid-template-columns:1fr}
+    .strip{gap:32px}
+  }
+  @media(max-width:520px){.steps{grid-template-columns:1fr}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <div class="logo">
+      <svg width="36" height="36" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="#185FA5" stroke-width="2.2"/>
+        <ellipse cx="20" cy="20" rx="14" ry="5.6" fill="none" stroke="#1D9E75" stroke-width="1.8" transform="rotate(-30 20 20)"/>
+        <circle cx="20" cy="20" r="3.6" fill="#185FA5"/>
+      </svg>
+      <h1>Satella</h1>
+    </div>
+    <a href="app.html" class="nav-cta">Try Satella</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <svg class="hero-grid" id="heroGrid" preserveAspectRatio="xMidYMid slice"></svg>
+  <div class="wrap">
+    <div class="eyebrow">Opportunity Intelligence</div>
+    <h2>Where <span class="hl">Data</span> meets opportunity.</h2>
+    <p>Satella şəhərlərin necə inkişaf etdiyini analiz edir, hələ az xidmət olunan zonaları tapır və biznesə növbəti filialı harada açmağı deyir — peyk, əhali və rəqabət datası ilə.</p>
+    <div class="btns">
+      <a href="app.html" class="btn-primary">Try Satella →</a>
+      <a href="#how" class="btn-ghost">Necə işləyir</a>
+    </div>
+    <div class="strip">
+      <div class="stat"><div class="n">3</div><div class="l">Kateqoriya: aptek, market, restoran</div></div>
+      <div class="stat"><div class="n">100%</div><div class="l">İctimai data — müştəri datası tələb olunmur</div></div>
+      <div class="stat"><div class="n">Bakı</div><div class="l">İlk şəhər, sonra region</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section>
+  <div class="wrap split">
+    <div>
+      <div class="sec-eyebrow">Problem</div>
+      <h3 class="sec-title">Genişlənmə qərarları təxminə söykənir</h3>
+      <p class="sec-lead">Bu gün biznes yeni filialı Google Maps, brokerlar və şəxsi təcrübə ilə seçir. Bu proses yavaş, subyektiv və bahalıdır — səhv yerdə açılan filial uzunmüddətli itkidir.</p>
+      <ul class="plist">
+        <li><span class="dot">?</span><div><b>Fürsət görünmür.</b> <span>Emerging tələb və xidmət boşluqları aşkar olunmur.</span></div></li>
+        <li><span class="dot">!</span><div><b>Risk yüksəkdir.</b> <span>Səhv qərarın qiyməti böyükdür və geri qaytarılması çətindir.</span></div></li>
+      </ul>
+    </div>
+    <div class="card-viz">
+      <div class="cap">◎ Opportunity Score</div>
+      <div class="big" id="scoreNum">87</div>
+      <div class="sub">Yüksək fürsət zonası</div>
+      <div class="vbar"><div class="vl"><span>Əhali</span></div><div class="vtrack"><span style="width:88%"></span></div></div>
+      <div class="vbar"><div class="vl"><span>Az rəqib</span></div><div class="vtrack"><span style="width:74%"></span></div></div>
+      <div class="vbar"><div class="vl"><span>Əlçatanlıq</span></div><div class="vtrack"><span style="width:92%"></span></div></div>
+      <div class="vbar"><div class="vl"><span>Urban böyümə</span></div><div class="vtrack"><span style="width:63%"></span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background:var(--white)">
+  <div class="wrap">
+    <div class="sec-eyebrow">Necə işləyir</div>
+    <h3 class="sec-title">Dörd addımda fürsət zonaları</h3>
+    <p class="sec-lead">İstifadəçi kateqoriya və maraq sahəsini seçir; Satella o sahəni qiymətləndirib ən yaxşı zonaları sıralayır.</p>
+    <div class="steps">
+      <div class="step"><h4>Kateqoriya</h4><p>Aptek, market və ya restoran seç.</p></div>
+      <div class="step"><h4>Mərkəz və radius</h4><p>Xəritədə maraq sahəni müəyyən et.</p></div>
+      <div class="step"><h4>Skorlama</h4><p>Hər zona əhali, rəqabət, əlçatanlıq və böyümə üzrə qiymətləndirilir.</p></div>
+      <div class="step"><h4>Tövsiyə</h4><p>Ən yüksək fürsətli zonalar izahı ilə sıralanır.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- DIFFERENTIATOR -->
+<section class="diff">
+  <div class="wrap">
+    <div class="sec-eyebrow">Fərqimiz</div>
+    <h3 class="sec-title">Emerging bazarlar üçün qurulub</h3>
+    <p class="sec-lead">Qlobal platformalar data-zəngin bazarlar üçün qurulub. Satella isə datanın az olduğu yerlərdə işləyir.</p>
+    <div class="diff-grid">
+      <div class="dcard"><div class="ic">🛰️</div><h4>Peyk böyümə siqnalı</h4><p>Şəhərin harada inkişaf etdiyini peyk datası ilə görürük — rəqiblərdə yoxdur.</p></div>
+      <div class="dcard"><div class="ic">🌍</div><h4>Yerli data</h4><p>Emerging bazarların reallığı üçün qurulub — beynəlxalq platformaların örtmədiyi yerlər.</p></div>
+      <div class="dcard hl"><div class="ic">💡</div><h4>İzahlı skorlama</h4><p>Hər tövsiyənin səbəbi görünür: niyə bu zona? Qara qutu yox, şəffaf qərar.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final">
+  <svg class="final-grid" id="finalGrid" preserveAspectRatio="xMidYMid slice"></svg>
+  <div class="wrap">
+    <h3>Növbəti fürsəti bu gün kəşf et</h3>
+    <p>Bakı üzrə canlı demonu sına — kateqoriya seç, xəritəyə klik et, fürsət zonalarını gör.</p>
+    <a href="app.html" class="btn-primary">Try Satella →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="logo">
+      <svg width="34" height="34" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="14" fill="none" stroke="#fff" stroke-width="2.2"/>
+        <ellipse cx="20" cy="20" rx="14" ry="5.6" fill="none" stroke="#1D9E75" stroke-width="1.8" transform="rotate(-30 20 20)"/>
+        <circle cx="20" cy="20" r="3.6" fill="#fff"/>
+      </svg>
+      <h1>Satella</h1>
+    </div>
+    <div class="muted">Opportunity Intelligence for emerging markets · Bakı, Azərbaycan</div>
+  </div>
+</footer>
+
+<script>
+// Hexagon grid — fürsət zonaları kimi "işıqlanan" hexlər (signature element)
+function hexGrid(svg, accent){
+  const W=1200,H=700,s=46,dx=s*Math.sqrt(3),dy=s*1.5;
+  let html='',cells=[];
+  for(let row=0,y=-s;y<H+s;y+=dy,row++){
+    const off=(row%2)?dx/2:0;
+    for(let x=-s+off;x<W+s;x+=dx){
+      const pts=[];
+      for(let i=0;i<6;i++){const a=Math.PI/180*(60*i-30);pts.push([x+s*Math.cos(a),y+s*Math.sin(a)]);}
+      const d=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ')+'Z';
+      cells.push({d});
+      html+=`<path d="${d}" fill="none" stroke="#26215C" stroke-width="1" opacity="0.13"/>`;
+    }
+  }
+  // random subset "lit" as opportunity zones
+  const lit=[];
+  for(let i=0;i<cells.length;i++) if(Math.random()<0.06) lit.push(i);
+  lit.forEach((idx,k)=>{
+    html+=`<path d="${cells[idx].d}" fill="${accent}" opacity="0"
+      stroke="${accent}" stroke-width="1.5">
+      <animate attributeName="opacity" values="0;0.5;0.18" dur="${3+Math.random()*3}s"
+      begin="${(k*0.15).toFixed(2)}s" repeatCount="indefinite"/></path>`;
+  });
+  svg.innerHTML=html;
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+}
+hexGrid(document.getElementById('heroGrid'),'#1D9E75');
+hexGrid(document.getElementById('finalGrid'),'#185FA5');
+
+// Hero score count-up
+const sn=document.getElementById('scoreNum');
+if(sn){let v=0;const t=setInterval(()=>{v+=3;if(v>=87){v=87;clearInterval(t);}sn.textContent=v;},22);}
+</script>
+</body>
+</html>
