@@ -161,7 +161,7 @@ function run(){
   const rows=DATA[category]||[];
   let inArea=rows.map(r=>({...r,dist:distKm(center.lat,center.lon,r.lat,r.lon)}))
                  .filter(r=>r.dist<=radiusKm);
-  if(growthOnly) inArea=inArea.filter(r=>r.c_growth>=60);  // inkişaf filtri
+  if(growthOnly) inArea=inArea.filter(r=>r.c_grow>1);  // inkişaf filtri
   hexLayer.clearLayers();
   const res=document.getElementById('results');
   if(inArea.length===0){
@@ -181,26 +181,26 @@ function run(){
       <div class="rank">${i+1}</div>
       <div class="meta"><div class="sc">${r.score} bal</div>
       <div class="sub">${r.dist.toFixed(1)} km · əhali ${r.pop.toLocaleString()}</div>
-      ${r.c_growth>=60?'<div class="grow">↗ inkişaf edən zona</div>':''}</div></div>`).join('');
+      ${r.c_grow>1?'<div class="grow">↗ inkişaf edən zona</div>':''}</div></div>`).join('');
   res.querySelectorAll('.zone').forEach(z=>{z.onclick=()=>{const r=top[+z.dataset.i];
     map.setView([r.lat,r.lon],15);r._layer.openPopup();};});
 }
 function popupHtml(r,rank){
-  const bar=(lab,v,cls='')=>`<div style="font-size:11px;color:#5F5E5A">${lab}</div><div class="bar ${cls}"><span style="width:${v}%"></span></div>`;
-  // yaş nisbəti — hansı üstünlük təşkil edir
-  let ageLine = '';
-  if(r.young_pct !== undefined){
-    const dom = r.young_pct >= 55 ? 'gənc əhali üstünlük təşkil edir'
-              : r.elderly_pct >= 55 ? 'yaşlı əhali üstünlük təşkil edir'
-              : 'qarışıq yaş strukturu';
-    ageLine = `<div style="font-size:11px;color:#185FA5;margin:2px 0 8px">
-      Gənc (20-44): ${r.young_pct}% · Yaşlı (50+): ${r.elderly_pct}%<br>
-      <span style="color:#1D9E75">↳ ${dom}</span></div>`;
+  const bar=(lab,v,cls='')=>`<div style="font-size:11px;color:#5F5E5A">${lab}</div><div class="bar ${cls}"><span style="width:${Math.max(0,Math.min(100,v))}%"></span></div>`;
+  // böyümə yalnız bonus varsa göstərilir (asimmetrik siqnal)
+  let growLine = '';
+  if(r.c_grow !== undefined && r.c_grow > 1){
+    growLine = `<div style="font-size:11.5px;color:#1D9E75;font-weight:600;margin:6px 0 2px">
+      ↗ İnkişaf bonusu: +${r.c_grow} xal</div>`;
   }
-  return `<b>#${rank} — ${r.score} bal</b><br>Mərkəzdən: ${r.dist.toFixed(1)} km · Əhali: ${r.pop.toLocaleString()}
-    ${ageLine}
-    ${bar('Əhali',r.c_pop)}${bar('Az rəqib',r.c_comp)}${bar('Əlçatanlıq',r.c_acc)}${bar('Sıxlıq',r.c_dens)}
-    ${bar('Böyümə (peyk)',r.c_growth,'gr')}`;
+  return `<b>#${rank} — ${r.score} bal</b><br>
+    Mərkəzdən: ${r.dist.toFixed(1)} km · Əhali: ${r.pop.toLocaleString()}<br><br>
+    ${bar('Əhali',r.c_pop)}
+    ${bar('Az rəqib',r.c_comp)}
+    ${bar('Əlçatanlıq',r.c_acc)}
+    ${bar('Sıxlıq',r.c_dens)}
+    ${bar('İqtisadi aktivlik (peyk)',r.c_econ,'gr')}
+    ${growLine}`;
 }
 </script>
 </body>
