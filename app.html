@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Satella — Fürsət Zonaları</title>
+<title>Satella — Opportunity Zones</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -80,11 +80,11 @@
     </a>
 
     <div class="section">
-      <div class="label">1 · Kateqoriya</div>
+      <div class="label">1 · Category</div>
       <div class="cats cats3">
-        <div class="cat active" data-cat="pharmacy"><span class="ico">💊</span><span class="nm">Aptek</span></div>
-        <div class="cat" data-cat="supermarket"><span class="ico">🛒</span><span class="nm">Market</span></div>
-        <div class="cat" data-cat="restaurant"><span class="ico">🍽️</span><span class="nm">Restoran</span></div>
+        <div class="cat active" data-cat="pharmacy"><span class="ico">💊</span><span class="nm">Pharmacy</span></div>
+        <div class="cat" data-cat="supermarket"><span class="ico">🛒</span><span class="nm">Retail</span></div>
+        <div class="cat" data-cat="restaurant"><span class="ico">🍽️</span><span class="nm">Restaurant</span></div>
       </div>
     </div>
 
@@ -96,18 +96,18 @@
     </div>
 
     <div class="section">
-      <div class="label">3 · İnkişaf filtri</div>
+      <div class="label">3 · Growth filter</div>
       <label class="toggle">
         <input type="checkbox" id="growthOnly">
         <span class="switch"></span>
-        <span>Yalnız inkişaf edən zonalar</span>
+        <span>Only growing zones</span>
       </label>
-      <div class="toggle-hint">Aktivləşdirsən, yalnız peyk datası ilə böyüməsi yüksək olan zonalar göstərilir.</div>
+      <div class="toggle-hint">When enabled, shows only zones with a satellite-detected development bonus.</div>
     </div>
 
     <div class="section">
-      <div class="label">4 · Mərkəz</div>
-      <div class="hint" id="hint">Xəritədə istənilən yerə <b>klik et</b> — maraq sahənin mərkəzini seç.</div>
+      <div class="label">4 · Centre</div>
+      <div class="hint" id="hint"><b>Click anywhere</b> on the map to set the centre of your area of interest.</div>
     </div>
 
     <div class="results" id="results"></div>
@@ -128,7 +128,7 @@ hexLayer.addTo(map);
 
 fetch('satella_hexagons.json').then(r=>r.json()).then(d=>{DATA=d;if(center)run();})
   .catch(()=>{document.getElementById('results').innerHTML=
-    '<div class="empty"><div class="big">📂</div>satella_hexagons.json tapılmadı.<br>Faylı bu səhifə ilə eyni qovluğa qoy.</div>';});
+    '<div class="empty"><div class="big">📂</div>satella_hexagons.json not found.<br>Place the file in the same folder as this page.</div>';});
 
 document.querySelectorAll('.cat').forEach(c=>{c.onclick=()=>{
   document.querySelectorAll('.cat').forEach(x=>x.classList.remove('active'));
@@ -141,7 +141,7 @@ rad.oninput=()=>{radiusKm=parseFloat(rad.value);radVal.innerHTML=radiusKm.toFixe
 document.getElementById('growthOnly').onchange=(e)=>{growthOnly=e.target.checked;if(center&&DATA)run();};
 
 map.on('click',e=>{center={lat:e.latlng.lat,lon:e.latlng.lng};drawCenter();
-  document.getElementById('hint').innerHTML='Mərkəz seçildi ✓ — radiusu dəyiş və ya <b>yenidən klik et</b>.';
+  document.getElementById('hint').innerHTML='Centre set ✓ — adjust the radius or <b>click again</b>.';
   if(DATA)run();});
 
 function drawCenter(){
@@ -161,13 +161,13 @@ function run(){
   const rows=DATA[category]||[];
   let inArea=rows.map(r=>({...r,dist:distKm(center.lat,center.lon,r.lat,r.lon)}))
                  .filter(r=>r.dist<=radiusKm);
-  if(growthOnly) inArea=inArea.filter(r=>r.c_grow>1);  // inkişaf filtri
+  if(growthOnly) inArea=inArea.filter(r=>r.c_grow>1);  // growth filter
   hexLayer.clearLayers();
   const res=document.getElementById('results');
   if(inArea.length===0){
     res.innerHTML='<div class="empty"><div class="big">🔍</div>'+
-      (growthOnly?'Bu sahədə yüksək inkişaflı zona yoxdur. Filtri söndür və ya radiusu artır.'
-                 :'Bu sahədə skorlanmış zona yoxdur. Radiusu artır və ya başqa mərkəz seç.')+'</div>';
+      (growthOnly?'No high-growth zones in this area. Turn off the filter or increase the radius.'
+                 :'No scored zones in this area. Increase the radius or pick another centre.')+'</div>';
     return;
   }
   const scores=inArea.map(r=>r.score),mn=Math.min(...scores),mx=Math.max(...scores);
@@ -176,30 +176,30 @@ function run(){
   top.forEach((r,i)=>{
     const p=L.polygon(r.boundary,{color:'#1D9E75',weight:2.5,fillColor:color(r.score,mn,mx),fillOpacity:.82}).addTo(hexLayer);
     p.bindPopup(popupHtml(r,i+1));r._layer=p;});
-  res.innerHTML='<div class="res-head">TÖVSİYƏ OLUNAN ZONALAR ('+inArea.length+' zonadan top '+top.length+')</div>'+
+  res.innerHTML='<div class="res-head">RECOMMENDED ZONES (top '+top.length+' of '+inArea.length+')</div>'+
     top.map((r,i)=>`<div class="zone ${i<3?'top':''}" data-i="${i}">
       <div class="rank">${i+1}</div>
-      <div class="meta"><div class="sc">${r.score} bal</div>
-      <div class="sub">${r.dist.toFixed(1)} km · əhali ${r.pop.toLocaleString()}</div>
-      ${r.c_grow>1?'<div class="grow">↗ inkişaf edən zona</div>':''}</div></div>`).join('');
+      <div class="meta"><div class="sc">${r.score} pts</div>
+      <div class="sub">${r.dist.toFixed(1)} km · pop. ${r.pop.toLocaleString()}</div>
+      ${r.c_grow>1?'<div class="grow">↗ growing zone</div>':''}</div></div>`).join('');
   res.querySelectorAll('.zone').forEach(z=>{z.onclick=()=>{const r=top[+z.dataset.i];
     map.setView([r.lat,r.lon],15);r._layer.openPopup();};});
 }
 function popupHtml(r,rank){
   const bar=(lab,v,cls='')=>`<div style="font-size:11px;color:#5F5E5A">${lab}</div><div class="bar ${cls}"><span style="width:${Math.max(0,Math.min(100,v))}%"></span></div>`;
-  // böyümə yalnız bonus varsa göstərilir (asimmetrik siqnal)
+  // growth shown only when a bonus applies (asymmetric signal)
   let growLine = '';
   if(r.c_grow !== undefined && r.c_grow > 1){
     growLine = `<div style="font-size:11.5px;color:#1D9E75;font-weight:600;margin:6px 0 2px">
-      ↗ İnkişaf bonusu: +${r.c_grow} xal</div>`;
+      ↗ Development bonus: +${r.c_grow} pts</div>`;
   }
-  return `<b>#${rank} — ${r.score} bal</b><br>
-    Mərkəzdən: ${r.dist.toFixed(1)} km · Əhali: ${r.pop.toLocaleString()}<br><br>
-    ${bar('Əhali',r.c_pop)}
-    ${bar('Az rəqib',r.c_comp)}
-    ${bar('Əlçatanlıq',r.c_acc)}
-    ${bar('Sıxlıq',r.c_dens)}
-    ${bar('İqtisadi aktivlik (peyk)',r.c_econ,'gr')}
+  return `<b>#${rank} — ${r.score} pts</b><br>
+    From centre: ${r.dist.toFixed(1)} km · Population: ${r.pop.toLocaleString()}<br><br>
+    ${bar('Population',r.c_pop)}
+    ${bar('Low competition',r.c_comp)}
+    ${bar('Accessibility',r.c_acc)}
+    ${bar('Urban density',r.c_dens)}
+    ${bar('Economic activity (satellite)',r.c_econ,'gr')}
     ${growLine}`;
 }
 </script>
